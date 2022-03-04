@@ -2,7 +2,42 @@ version: "3.9"
 services:
   backend:
     build: .
+    container_name: backend_container
     ports:
       - "8000:8000"
     volumes:
       - .:/app
+    depends_on:
+      - db
+    networks:
+      - default
+
+  db:
+    image: "postgres:14.2-alpine"
+    container_name: db_container
+    restart: always
+    env_file: ".env"
+    volumes:
+      - dbdata:/var/lib/posgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - default
+
+  pgadmin:
+    image: "dpage/pgadmin4:latest"
+    container_name: pgadmin_container
+    env_file: ".env"
+    ports:
+      - "5050:80"
+    networks:
+      - default
+    restart: unless-stopped
+
+volumes:
+  dbdata:
+  data:
+
+networks:
+  default:
+    driver: bridge
