@@ -15,7 +15,7 @@ type RegisterData struct {
 	Email           string `json:"email" validate:"required,email,max=255"`
 }
 
-func Validate(data *RegisterData) map[string]string {
+func RegisterValidate(data *RegisterData) map[string]string {
 	validate := validator.New()
 	if err := validate.Struct(data); err != nil {
 		return validation.GetErrorBag(err)
