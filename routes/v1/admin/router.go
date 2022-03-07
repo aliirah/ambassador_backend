@@ -7,4 +7,5 @@ import (
 
 func MapUrl(r fiber.Router) {
 	r.Post("/register", v1.Register)
+	r.Post("/login", v1.Login)
 }
