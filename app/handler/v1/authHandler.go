@@ -5,6 +5,7 @@ import (
 	"alirah/app/request/v1/auth"
 	userResource "alirah/app/resource/user"
 	"alirah/database"
+	authHelper "alirah/util/auth"
 	"alirah/util/rest"
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/crypto/bcrypt"
@@ -51,5 +52,19 @@ func Login(c *fiber.Ctx) error {
 		return rest.ValidationError(c, err)
 	}
 
-	return nil
+	var user domain.User
+	database.DB.
+		Where("email = ?", body.Email).
+		Find(&user)
+
+	token, Terr := authHelper.CreateToken(c, user.Id)
+	if Terr != nil {
+		return rest.BadRequest(c, err)
+	}
+
+	return rest.Ok(c, fiber.Map{
+		"message": "Login Successfully",
+		"user":    userResource.SingleResource(&user),
+		"token":   token,
+	})
 }
