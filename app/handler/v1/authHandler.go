@@ -8,7 +8,6 @@ import (
 	authHelper "alirah/util/auth"
 	"alirah/util/rest"
 	"github.com/gofiber/fiber/v2"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -22,14 +21,14 @@ func Register(c *fiber.Ctx) error {
 		return rest.ValidationError(c, err)
 	}
 
-	password, _ := bcrypt.GenerateFromPassword([]byte(body.Password), 12)
 	user := domain.User{
 		FirstName:    body.FirstName,
 		LastName:     body.LastName,
 		Email:        body.Email,
-		Password:     password,
 		IsAmbassador: false,
 	}
+	user.SetPassword(body.Password)
+
 	res := database.DB.Create(&user)
 	if res.Error != nil {
 		return rest.BadRequest(c, res.Error)
