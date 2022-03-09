@@ -7,6 +7,8 @@ import (
 	"alirah/database"
 	authHelper "alirah/util/auth"
 	"alirah/util/rest"
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -56,14 +58,40 @@ func Login(c *fiber.Ctx) error {
 		Where("email = ?", body.Email).
 		Find(&user)
 
+	// Todo fix CreateToken
 	token, Terr := authHelper.CreateToken(c, user.Id)
 	if Terr != nil {
-		return rest.BadRequest(c, err)
+		return rest.BadRequest(c, Terr)
 	}
 
 	return rest.Ok(c, fiber.Map{
 		"message": "Login Successfully",
 		"user":    userResource.SingleResource(&user),
 		"token":   token,
+	})
+}
+
+func User(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+	token, err := authHelper.ParseToken(cookie)
+	if err != nil {
+		return rest.Unauthorized(c)
+	}
+
+	payload := token.Claims.(*jwt.StandardClaims)
+	var user domain.User
+	fmt.Println(payload.Subject)
+
+	return rest.Ok(c, fiber.Map{
+		"payload": payload,
+	})
+
+	// Todo fix Get Payload
+
+	database.DB.Where("id = ?", payload.Subject).First(&user)
+
+	return rest.Ok(c, fiber.Map{
+		"message": "Successfully",
+		"user":    userResource.SingleResource(&user),
 	})
 }

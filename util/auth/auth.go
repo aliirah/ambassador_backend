@@ -3,7 +3,10 @@ package auth
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"github.com/joho/godotenv"
+	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -11,13 +14,19 @@ func CreateToken(c *fiber.Ctx, userId uint) (string, error) {
 	var err error
 	expireTime := time.Now().Add(time.Hour * 24)
 
+	err = godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	secretKey := os.Getenv("SECRET_KEY")
+
 	// Creating Access Token
-	atClaims := jwt.MapClaims{}
-	atClaims["authorized"] = true
-	atClaims["user_id"] = userId
-	atClaims["exp"] = expireTime.Unix()
-	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, err := at.SignedString([]byte(os.Getenv("ACCESS_SECRET")))
+	payload := jwt.StandardClaims{
+		Subject:   strconv.Itoa(int(userId)),
+		ExpiresAt: expireTime.Unix(),
+	}
+	token, err := jwt.NewWithClaims(jwt.SigningMethodES256, payload).SignedString([]byte(secretKey))
+
 	if err != nil {
 		return "", err
 	}
@@ -30,6 +39,24 @@ func CreateToken(c *fiber.Ctx, userId uint) (string, error) {
 		HTTPOnly: true,
 	}
 	c.Cookie(&cookie)
+
+	return token, nil
+}
+
+func ParseToken(cookie string) (*jwt.Token, error) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	secretKey := os.Getenv("SECRET_KEY")
+
+	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secretKey), nil
+	})
+
+	if err != nil || !token.Valid {
+		return nil, err
+	}
 
 	return token, nil
 }
