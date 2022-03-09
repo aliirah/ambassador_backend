@@ -25,7 +25,7 @@ func CreateToken(c *fiber.Ctx, userId uint) (string, error) {
 		Subject:   strconv.Itoa(int(userId)),
 		ExpiresAt: expireTime.Unix(),
 	}
-	token, err := jwt.NewWithClaims(jwt.SigningMethodES256, payload).SignedString([]byte(secretKey))
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, payload).SignedString([]byte(secretKey))
 
 	if err != nil {
 		return "", err
