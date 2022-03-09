@@ -5,9 +5,10 @@ import (
 	"alirah/app/request/v1/auth"
 	userResource "alirah/app/resource/user"
 	"alirah/database"
+	authHelper "alirah/util/auth"
 	"alirah/util/rest"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -21,14 +22,14 @@ func Register(c *fiber.Ctx) error {
 		return rest.ValidationError(c, err)
 	}
 
-	password, _ := bcrypt.GenerateFromPassword([]byte(body.Password), 12)
 	user := domain.User{
 		FirstName:    body.FirstName,
 		LastName:     body.LastName,
 		Email:        body.Email,
-		Password:     password,
 		IsAmbassador: false,
 	}
+	user.SetPassword(body.Password)
+
 	res := database.DB.Create(&user)
 	if res.Error != nil {
 		return rest.BadRequest(c, res.Error)
@@ -51,5 +52,37 @@ func Login(c *fiber.Ctx) error {
 		return rest.ValidationError(c, err)
 	}
 
-	return nil
+	var user domain.User
+	database.DB.
+		Where("email = ?", body.Email).
+		Find(&user)
+
+	token, Terr := authHelper.CreateToken(c, user.Id)
+	if Terr != nil {
+		return rest.BadRequest(c, Terr)
+	}
+
+	return rest.Ok(c, fiber.Map{
+		"message": "Login Successfully",
+		"user":    userResource.SingleResource(&user),
+		"token":   token,
+	})
+}
+
+func User(c *fiber.Ctx) error {
+	cookie := c.Cookies("jwt")
+	token, err := authHelper.ParseToken(cookie)
+	if err != nil {
+		return rest.Unauthorized(c)
+	}
+
+	payload := token.Claims.(*jwt.StandardClaims)
+
+	var user domain.User
+	database.DB.Where("id = ?", payload.Subject).First(&user)
+
+	return rest.Ok(c, fiber.Map{
+		"message": "Successfully",
+		"user":    userResource.SingleResource(&user),
+	})
 }

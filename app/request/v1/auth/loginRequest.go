@@ -5,7 +5,6 @@ import (
 	"alirah/database"
 	"alirah/util/validation"
 	"github.com/go-playground/validator"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type LoginData struct {
@@ -30,7 +29,7 @@ func LoginValidate(data *LoginData) map[string]string {
 		}
 	}
 
-	err := bcrypt.CompareHashAndPassword(user.Password, []byte(data.Password))
+	err := user.ComparePassword(data.Password)
 	if err != nil {
 		return map[string]string{
 			"credential": "email or password is wrong!",
