@@ -2,14 +2,13 @@ package v1
 
 import (
 	"alirah/app/domain"
+	"alirah/app/middleware"
 	"alirah/app/request/v1/auth"
 	userResource "alirah/app/resource/user"
 	"alirah/database"
 	authHelper "alirah/util/auth"
 	"alirah/util/rest"
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	"time"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -71,16 +70,7 @@ func Login(c *fiber.Ctx) error {
 }
 
 func User(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
-	token, err := authHelper.ParseToken(cookie)
-	if err != nil {
-		return rest.Unauthorized(c)
-	}
-
-	payload := token.Claims.(*jwt.StandardClaims)
-
-	var user domain.User
-	database.DB.Where("id = ?", payload.Subject).First(&user)
+	user := middleware.GetUser(c)
 
 	return rest.Ok(c, fiber.Map{
 		"message": "Successfully",
@@ -89,20 +79,7 @@ func User(c *fiber.Ctx) error {
 }
 
 func Logout(c *fiber.Ctx) error {
-	jwtCookie := c.Cookies("jwt")
-	_, err := authHelper.ParseToken(jwtCookie)
-	if err != nil {
-		return rest.Unauthorized(c)
-	}
-
-	cookie := fiber.Cookie{
-		Name:     "jwt",
-		Value:    "",
-		Expires:  time.Now().Add(-time.Hour),
-		HTTPOnly: true,
-	}
-
-	c.Cookie(&cookie)
+	authHelper.RemoveAuthCookie(c)
 
 	return rest.Ok(c, fiber.Map{
 		"message": "Successfully Logout",

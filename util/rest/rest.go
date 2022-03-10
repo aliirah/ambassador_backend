@@ -51,7 +51,7 @@ func NotFound(c *fiber.Ctx) error {
 
 func Unauthorized(c *fiber.Ctx) error {
 	err := c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-		"message": "Unauthorized",
+		"message": "UnAuthenticated",
 	})
 	if err != nil {
 		return err
