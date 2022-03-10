@@ -9,6 +9,7 @@ import (
 	"alirah/util/rest"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
+	"time"
 )
 
 func Register(c *fiber.Ctx) error {
@@ -84,5 +85,26 @@ func User(c *fiber.Ctx) error {
 	return rest.Ok(c, fiber.Map{
 		"message": "Successfully",
 		"user":    userResource.SingleResource(&user),
+	})
+}
+
+func Logout(c *fiber.Ctx) error {
+	jwtCookie := c.Cookies("jwt")
+	_, err := authHelper.ParseToken(jwtCookie)
+	if err != nil {
+		return rest.Unauthorized(c)
+	}
+
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
+
+	return rest.Ok(c, fiber.Map{
+		"message": "Successfully Logout",
 	})
 }

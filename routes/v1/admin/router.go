@@ -9,4 +9,5 @@ func MapUrl(r fiber.Router) {
 	r.Post("/register", v1.Register)
 	r.Post("/login", v1.Login)
 	r.Get("/user", v1.User)
+	r.Post("/logout", v1.Logout)
 }
