@@ -31,7 +31,12 @@ func CreateToken(c *fiber.Ctx, userId uint) (string, error) {
 		return "", err
 	}
 
-	// Create cookie
+	AddAuthCookie(c, token, expireTime)
+
+	return token, nil
+}
+
+func AddAuthCookie(c *fiber.Ctx, token string, expireTime time.Time) {
 	cookie := fiber.Cookie{
 		Name:     "jwt",
 		Value:    token,
@@ -39,8 +44,17 @@ func CreateToken(c *fiber.Ctx, userId uint) (string, error) {
 		HTTPOnly: true,
 	}
 	c.Cookie(&cookie)
+}
 
-	return token, nil
+func RemoveAuthCookie(c *fiber.Ctx) {
+	cookie := fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	}
+
+	c.Cookie(&cookie)
 }
 
 func ParseToken(cookie string) (*jwt.Token, error) {
