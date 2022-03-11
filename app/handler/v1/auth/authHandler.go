@@ -36,8 +36,8 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	return rest.Ok(c, fiber.Map{
-		"message": "Hello World!",
-		"user":    userResource.SingleResource(&user),
+		"message":    "Hello World!",
+		"ambassador": userResource.SingleResource(&user),
 	})
 }
 
@@ -63,9 +63,9 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	return rest.Ok(c, fiber.Map{
-		"message": "Login Successfully",
-		"user":    userResource.SingleResource(&user),
-		"token":   token,
+		"message":    "Login Successfully",
+		"ambassador": userResource.SingleResource(&user),
+		"token":      token,
 	})
 }
 
@@ -73,8 +73,8 @@ func User(c *fiber.Ctx) error {
 	user := middleware.GetUser(c)
 
 	return rest.Ok(c, fiber.Map{
-		"message": "Successfully",
-		"user":    userResource.SingleResource(&user),
+		"message":    "Successfully",
+		"ambassador": userResource.SingleResource(&user),
 	})
 }
 
@@ -114,8 +114,8 @@ func UpdateInfo(c *fiber.Ctx) error {
 	})
 
 	return rest.Ok(c, fiber.Map{
-		"message": "user " + user.Email + " successfully updated.",
-		"user":    userResource.SingleResource(&user),
+		"message":    "ambassador " + user.Email + " successfully updated.",
+		"ambassador": userResource.SingleResource(&user),
 	})
 }
 
@@ -137,6 +137,6 @@ func UpdatePassword(c *fiber.Ctx) error {
 	database.DB.Model(&user).Updates(&user)
 	authHelper.RemoveAuthCookie(c)
 	return rest.Ok(c, fiber.Map{
-		"message": "password of user " + user.Email + " successfully updated.",
+		"message": "password of ambassador " + user.Email + " successfully updated.",
 	})
 }

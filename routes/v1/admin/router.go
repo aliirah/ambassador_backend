@@ -1,6 +1,7 @@
 package admin
 
 import (
+	ambassadorHandler "alirah/app/handler/v1/ambassador"
 	authHandler "alirah/app/handler/v1/auth"
 	"alirah/app/middleware"
 	"github.com/gofiber/fiber/v2"
@@ -17,4 +18,6 @@ func MapUrl(r fiber.Router) {
 	auth.Post("/logout", authHandler.Logout)
 	auth.Put("/update", authHandler.UpdateInfo)
 	auth.Put("/update/password", authHandler.UpdatePassword)
+
+	auth.Get("/ambassadors", ambassadorHandler.Index)
 }

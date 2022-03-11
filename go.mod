@@ -3,6 +3,8 @@ module alirah
 go 1.16
 
 require (
+	github.com/biezhi/gorm-paginator/pagination v0.0.0-20190124091837-7a5c8ed20334 // indirect
+	github.com/bxcodec/faker/v3 v3.8.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator v9.31.0+incompatible // indirect
