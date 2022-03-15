@@ -1,7 +1,7 @@
 package ambassador
 
 import (
-	"alirah/app/domain"
+	user2 "alirah/app/domain/user"
 	"alirah/app/resource/user"
 	"alirah/database"
 	"alirah/util/rest"
@@ -9,7 +9,7 @@ import (
 )
 
 func Index(c *fiber.Ctx) error {
-	var ambassadors []domain.User
+	var ambassadors []user2.User
 	database.DB.
 		Where("is_ambassador = true").
 		Find(&ambassadors)

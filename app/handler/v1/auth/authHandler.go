@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"alirah/app/domain"
+	domain "alirah/app/domain/user"
 	"alirah/app/middleware"
 	"alirah/app/request/v1/auth"
 	userResource "alirah/app/resource/user"

@@ -1,6 +1,8 @@
 package user
 
-import "alirah/app/domain"
+import (
+	domain "alirah/app/domain/user"
+)
 
 type userResource struct {
 	ID       uint   `json:"id"`
@@ -17,7 +19,7 @@ func SingleResource(user *domain.User) *userResource {
 }
 
 func Collection(users *[]domain.User) []*userResource {
-	var resources []*userResource
+	resources := make([]*userResource, 0)
 	for _, value := range *users {
 		resource := SingleResource(&value)
 		resources = append(resources, resource)

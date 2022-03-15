@@ -18,7 +18,7 @@ func GetErrorBag(err error) map[string]string {
 
 		field := stringHelper.ToSnakeCase(err.Field())
 		param := stringHelper.ToSnakeCase(err.Param())
-		errors[field] = fmt.Sprintf("%s should be %s %s", field, err.Tag(), param)
+		errors[field] = fmt.Sprintf("%s is %s %s", field, err.Tag(), param)
 	}
 	return errors
 }
