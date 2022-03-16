@@ -25,4 +25,6 @@ func MapUrl(r fiber.Router) {
 	auth.Get("/products", productHandler.Index)
 	auth.Post("/products", productHandler.Store)
 	auth.Get("/products/:id", productHandler.Show)
+	auth.Put("/products/:id", productHandler.Update)
+	auth.Delete("/products/:id", productHandler.Delete)
 }
