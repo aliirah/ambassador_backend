@@ -1,7 +1,7 @@
 package auth
 
 import (
-	domain "alirah/app/domain/user"
+	"alirah/app/domain"
 	"alirah/database"
 	"alirah/util/validation"
 	"github.com/go-playground/validator"

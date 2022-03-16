@@ -1,7 +1,7 @@
 package user
 
 import (
-	domain "alirah/app/domain/user"
+	"alirah/app/domain"
 )
 
 type userResource struct {

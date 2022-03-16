@@ -1,8 +1,7 @@
 package database
 
 import (
-	"alirah/app/domain/product"
-	userDomain "alirah/app/domain/user"
+	"alirah/app/domain"
 	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -40,8 +39,8 @@ func Connect() {
 
 func Migrate() {
 	err := DB.AutoMigrate(
-		userDomain.User{},
-		product.Product{},
+		domain.User{},
+		domain.Product{},
 	)
 	if err != nil {
 		log.Println("cannot migrate")

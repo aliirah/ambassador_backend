@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	domain "alirah/app/domain/user"
+	"alirah/app/domain"
 	"alirah/database"
 	authHelper "alirah/util/auth"
 	"alirah/util/rest"

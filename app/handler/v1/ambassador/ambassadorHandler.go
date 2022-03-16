@@ -1,7 +1,7 @@
 package ambassador
 
 import (
-	user2 "alirah/app/domain/user"
+	user2 "alirah/app/domain"
 	"alirah/app/resource/user"
 	"alirah/database"
 	"alirah/util/rest"

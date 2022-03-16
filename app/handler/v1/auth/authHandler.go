@@ -1,7 +1,7 @@
 package auth
 
 import (
-	domain "alirah/app/domain/user"
+	"alirah/app/domain"
 	"alirah/app/middleware"
 	"alirah/app/request/v1/auth"
 	userResource "alirah/app/resource/user"
@@ -107,11 +107,12 @@ func UpdateInfo(c *fiber.Ctx) error {
 		return rest.BadRequest(c, "email is taken")
 	}
 
-	database.DB.Model(&user).Updates(domain.User{
+	uUser := domain.User{
 		FirstName: body.FirstName,
 		LastName:  body.LastName,
 		Email:     body.Email,
-	})
+	}
+	database.DB.Model(&user).Updates(&uUser)
 
 	return rest.Ok(c, fiber.Map{
 		"message":    "ambassador " + user.Email + " successfully updated.",

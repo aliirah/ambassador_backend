@@ -1,8 +1,7 @@
 package main
 
 import (
-	productDomain "alirah/app/domain/product"
-	userDomain "alirah/app/domain/user"
+	productDomain "alirah/app/domain"
 	"alirah/database"
 	"github.com/bxcodec/faker/v3"
 	"math/rand"
@@ -18,7 +17,7 @@ func main() {
 
 func ambassadorSeeder() {
 	for i := 0; i < 30; i++ {
-		ambassador := userDomain.User{
+		ambassador := productDomain.User{
 			FirstName:    faker.FirstName(),
 			LastName:     faker.LastName(),
 			Email:        faker.Email(),

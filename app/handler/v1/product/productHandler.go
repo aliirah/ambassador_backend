@@ -1,7 +1,7 @@
 package product
 
 import (
-	domain "alirah/app/domain/product"
+	"alirah/app/domain"
 	productRequest "alirah/app/request/v1/product"
 	productResource "alirah/app/resource/product"
 	"alirah/database"
@@ -82,12 +82,12 @@ func Update(c *fiber.Ctx) error {
 
 	// TODO handle image
 	uProduct := domain.Product{
-		Id:          product.Id,
 		Title:       body.Title,
 		Description: body.Description,
 		Image:       body.Image,
 		Price:       body.Price,
 	}
+	uProduct.Id = uint(id)
 	database.DB.Model(&product).Updates(&uProduct)
 
 	return rest.Ok(c, fiber.Map{

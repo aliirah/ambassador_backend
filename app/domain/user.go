@@ -1,9 +1,11 @@
-package user
+package domain
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"golang.org/x/crypto/bcrypt"
+)
 
 type User struct {
-	Id           uint   `json:"id"`
+	Model
 	FirstName    string `json:"first_name"`
 	LastName     string `json:"last_name"`
 	Email        string `json:"email" gorm:"unique"`
@@ -11,14 +13,14 @@ type User struct {
 	IsAmbassador bool   `json:"is_ambassador"`
 }
 
-func (user *User) SetPassword(password string) []byte {
+func (u *User) SetPassword(password string) []byte {
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
-	user.Password = hashedPassword
+	u.Password = hashedPassword
 	return hashedPassword
 }
 
-func (user *User) ComparePassword(password string) error {
-	err := bcrypt.CompareHashAndPassword(user.Password, []byte(password))
+func (u *User) ComparePassword(password string) error {
+	err := bcrypt.CompareHashAndPassword(u.Password, []byte(password))
 	if err != nil {
 		return err
 	}
