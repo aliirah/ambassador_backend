@@ -3,6 +3,7 @@ package admin
 import (
 	ambassadorHandler "alirah/app/handler/v1/ambassador"
 	authHandler "alirah/app/handler/v1/auth"
+	linkHandler "alirah/app/handler/v1/link"
 	productHandler "alirah/app/handler/v1/product"
 	"alirah/app/middleware"
 	"github.com/gofiber/fiber/v2"
@@ -27,4 +28,6 @@ func MapUrl(r fiber.Router) {
 	auth.Get("/products/:id", productHandler.Show)
 	auth.Put("/products/:id", productHandler.Update)
 	auth.Delete("/products/:id", productHandler.Delete)
+
+	auth.Get("/users/:id/links", linkHandler.Index)
 }

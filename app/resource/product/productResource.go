@@ -4,7 +4,7 @@ import (
 	"alirah/app/domain"
 )
 
-type userResource struct {
+type productResource struct {
 	Id          uint    `json:"id"`
 	Title       string  `json:"title"`
 	Description string  `json:"description"`
@@ -14,8 +14,8 @@ type userResource struct {
 	UpdatedAt   string  `json:"updated_at"`
 }
 
-func SingleResource(p *domain.Product) *userResource {
-	product := &userResource{
+func SingleResource(p *domain.Product) *productResource {
+	product := &productResource{
 		Title:       p.Title,
 		Description: p.Description,
 		Image:       p.Image,
@@ -27,8 +27,8 @@ func SingleResource(p *domain.Product) *userResource {
 	return product
 }
 
-func Collection(products *[]domain.Product) []*userResource {
-	resources := make([]*userResource, 0)
+func Collection(products *[]domain.Product) []*productResource {
+	resources := make([]*productResource, 0)
 	for _, value := range *products {
 		resource := SingleResource(&value)
 		resources = append(resources, resource)

@@ -41,6 +41,7 @@ func Migrate() {
 	err := DB.AutoMigrate(
 		domain.User{},
 		domain.Product{},
+		domain.Link{},
 	)
 	if err != nil {
 		log.Println("cannot migrate")
