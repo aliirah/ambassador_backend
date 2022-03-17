@@ -42,6 +42,8 @@ func Migrate() {
 		domain.User{},
 		domain.Product{},
 		domain.Link{},
+		domain.Order{},
+		domain.OrderItem{},
 	)
 	if err != nil {
 		log.Println("cannot migrate")
