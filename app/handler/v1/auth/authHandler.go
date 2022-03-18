@@ -57,7 +57,7 @@ func Login(c *fiber.Ctx) error {
 		Where("email = ?", body.Email).
 		Find(&user)
 
-	token, Terr := authHelper.CreateToken(c, user.Id)
+	token, Terr := authHelper.CreateToken(c, user.ID)
 	if Terr != nil {
 		return rest.BadRequest(c, Terr)
 	}
@@ -103,7 +103,7 @@ func UpdateInfo(c *fiber.Ctx) error {
 	var existsUser domain.User
 	res := database.DB.Find(&existsUser, "email = ?", body.Email)
 
-	if res.RowsAffected > 0 && existsUser.Id != user.Id {
+	if res.RowsAffected > 0 && existsUser.ID != user.ID {
 		return rest.BadRequest(c, "email is taken")
 	}
 

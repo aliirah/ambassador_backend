@@ -3,7 +3,8 @@ package domain
 type Order struct {
 	Model
 	TransactionId   string      `json:"transaction_id" gorm:"null"`
-	UserId          uint        `json:"user_id"`
+	UserID          uint        `json:"user_id"`
+	User            User        `json:"user" gorm:"foreignKey:UserID"`
 	Code            string      `json:"code"`
 	AmbassadorEmail string      `json:"ambassador_email"`
 	FirstName       string      `json:"first_name"`
@@ -14,7 +15,7 @@ type Order struct {
 	Country         string      `json:"country" gorm:"null"`
 	Zip             string      `json:"zip" gorm:"null"`
 	Complete        bool        `json:"complete" gorm:"default:false"`
-	OrderItem       []OrderItem `json:"order_item" gorm:"foreignKey:OrderId"`
+	OrderItems      []OrderItem `json:"order_items" gorm:"foreignKey:OrderId"`
 }
 
 type OrderItem struct {

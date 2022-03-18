@@ -11,13 +11,14 @@ type orderResource struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
-func SingleResource(p *domain.Order) *orderResource {
+func SingleResource(r *domain.Order) *orderResource {
 	order := &orderResource{
-		Code:      p.Code,
-		CreatedAt: p.CreatedAt.Format("2006-01-02 15:04:05"),
-		UpdatedAt: p.UpdatedAt.Format("2006-01-02 15:04:05"),
+		Code: r.Code,
+		// TODO handle order resource
+		CreatedAt: r.CreatedAt.Format("2006-01-02 15:04:05"),
+		UpdatedAt: r.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
-	order.Id = p.Id
+	order.Id = r.ID
 	return order
 }
 

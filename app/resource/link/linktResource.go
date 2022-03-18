@@ -17,7 +17,7 @@ func SingleResource(p *domain.Link) *linkResource {
 		CreatedAt: p.CreatedAt.Format("2006-01-02 15:04:05"),
 		UpdatedAt: p.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
-	link.Id = p.Id
+	link.Id = p.ID
 	return link
 }
 

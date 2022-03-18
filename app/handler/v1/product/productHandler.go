@@ -87,7 +87,7 @@ func Update(c *fiber.Ctx) error {
 		Image:       body.Image,
 		Price:       body.Price,
 	}
-	uProduct.Id = uint(id)
+	uProduct.ID = uint(id)
 	database.DB.Model(&product).Updates(&uProduct)
 
 	return rest.Ok(c, fiber.Map{
